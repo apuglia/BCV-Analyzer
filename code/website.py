@@ -90,6 +90,34 @@ if not filtered_df.empty:
         use_container_width=True
     )
 
+# Show percentage change chart
+if not filtered_df.empty:
+    chart_df = filtered_df.copy()
+    chart_df = chart_df.sort_values('fecha')
+    
+    # Calculate daily percentage change (day-to-day)
+    chart_df['pct_change_daily'] = chart_df['compra'].pct_change() * 100
+    
+    # Calculate statistics for daily changes
+    daily_changes = chart_df['pct_change_daily'].dropna()
+    
+    if not daily_changes.empty:
+        # Display metrics for daily changes
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Cambio Promedio Diario", f"{daily_changes.mean():.2f}%")
+        with col2:
+            st.metric("Cambio Máximo Diario", f"{daily_changes.max():.2f}%")
+        with col3:
+            st.metric("Cambio Mínimo Diario", f"{daily_changes.min():.2f}%")
+        
+        # Show daily percentage change chart
+        st.subheader('Cambio porcentual diario')
+        st.line_chart(
+            data=chart_df.set_index('fecha')['pct_change_daily'],
+            use_container_width=True
+        )
+
 # Format 'compra' to 4 decimals and 'fecha' to only date (no time)
 display_df = filtered_df.copy()
 display_df['compra'] = display_df['compra'].map(lambda x: f"{x:.4f}")
