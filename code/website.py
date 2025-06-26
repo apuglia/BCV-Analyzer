@@ -2,15 +2,37 @@ import pandas as pd
 import streamlit as st
 from io import BytesIO
 from datetime import date
+import subprocess
+import os
 
-# Load your cleaned data
-df = pd.read_csv("../data/cleaned/tasas_sistema_bancario_full.csv")
+# Layout: Title and Refresh Button
+col1, col2 = st.columns([4, 1])
+with col1:
+    st.title("Tasas Sistema Bancario")
+with col2:
+    if st.button("Actualizar datos"):
+        with st.spinner("Actualizando datos..."):
+            subprocess.run(["python", "get_tasas.py"])
+            subprocess.run(["python", "clean_tasas.py"])
+        st.success("Datos actualizados. Recargando...")
+        st.rerun()  # Reload the app to show new data
+
+# Load your cleaned data (after possible update)
+csv_path = "../data/cleaned/tasas_sistema_bancario_full.csv"
+if not os.path.exists(csv_path):
+    st.error(f"File not found: {csv_path}. Please run the data preparation scripts first.")
+    st.stop()
+
+df = pd.read_csv(csv_path)
+
+# Show the date of the last data point
+if not df.empty and 'fecha' in df.columns:
+    last_date = pd.to_datetime(df['fecha']).max().strftime('%Y-%m-%d')
+    st.info(f"Última fecha de datos: {last_date}")
 
 # Convert 'fecha' column to datetime
 if not pd.api.types.is_datetime64_any_dtype(df['fecha']):
     df['fecha'] = pd.to_datetime(df['fecha'])
-
-st.title("Tasas Sistema Bancario")
 
 # KPI: Show the most recent 'compra' value in a blueish box
 if not df.empty:
