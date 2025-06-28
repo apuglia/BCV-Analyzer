@@ -153,14 +153,38 @@ if not filtered_df.empty:
     daily_changes = chart_df['pct_change_daily'].dropna()
     
     if not daily_changes.empty:
-        # Display metrics for daily changes
+        # Display metrics for daily changes with blueish background
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Cambio Promedio Diario", f"{daily_changes.mean():.2f}%")
+            st.markdown(
+                f"""
+                <div style='background-color: #e3f0ff; border-radius: 12px; padding: 14px 0 10px 0; text-align: center; margin-bottom: 8px;'>
+                    <span style='color: #1a4a7a; font-size: 1.0em; font-weight: 600;'>Cambio Promedio Diario</span><br>
+                    <span style='font-size: 2em; color: #1a4a7a; font-weight: 700;'>{daily_changes.mean():.2f}%</span>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
         with col2:
-            st.metric("Cambio Máximo Diario", f"{daily_changes.max():.2f}%")
+            st.markdown(
+                f"""
+                <div style='background-color: #e3f0ff; border-radius: 12px; padding: 14px 0 10px 0; text-align: center; margin-bottom: 8px;'>
+                    <span style='color: #1a4a7a; font-size: 1.0em; font-weight: 600;'>Cambio Máximo Diario</span><br>
+                    <span style='font-size: 2em; color: #1a4a7a; font-weight: 700;'>{daily_changes.max():.2f}%</span>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
         with col3:
-            st.metric("Cambio Mínimo Diario", f"{daily_changes.min():.2f}%")
+            st.markdown(
+                f"""
+                <div style='background-color: #e3f0ff; border-radius: 12px; padding: 14px 0 10px 0; text-align: center; margin-bottom: 8px;'>
+                    <span style='color: #1a4a7a; font-size: 1.0em; font-weight: 600;'>Cambio Mínimo Diario</span><br>
+                    <span style='font-size: 2em; color: #1a4a7a; font-weight: 700;'>{daily_changes.min():.2f}%</span>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
         
         # Show daily percentage change chart
         st.subheader('Cambio porcentual diario')
