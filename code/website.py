@@ -94,6 +94,19 @@ else:
     filtered_df = df.copy()
 
 
+# After filtering filtered_df, add this KPI for latest compra
+if not filtered_df.empty:
+    latest_row = filtered_df.sort_values('fecha').iloc[-1]
+    st.markdown(
+        f"""
+        <div style='background-color: #e3f0ff; padding: 16px; border-radius: 10px; margin-bottom: 18px; text-align: center;'>
+            <span style='color: #1a4a7a; font-size: 1.1em; font-weight: 600;'>Compra más reciente (banco seleccionado)</span><br>
+            <span style='font-size: 2em; color: #1a4a7a; font-weight: 700;'>{latest_row['compra']:.2f}</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 # Convert to date for Streamlit slider
 min_date = filtered_df['fecha'].min().date()
 max_date = filtered_df['fecha'].max().date()
@@ -183,4 +196,5 @@ st.markdown(
     "<style>.element-container .stMetric { min-width: 120px; }</style>",
     unsafe_allow_html=True
 )
+
 
