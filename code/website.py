@@ -129,8 +129,9 @@ st.dataframe(display_df)
 
 # Add download button for Excel
 output = BytesIO()
-with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+with pd.ExcelWriter(output, engine='openpyxl') as writer:
     filtered_df.to_excel(writer, index=False, sheet_name='Sheet1')
+    writer.close()  # Ensure the writer is properly closed
     processed_data = output.getvalue()
 
 st.download_button(

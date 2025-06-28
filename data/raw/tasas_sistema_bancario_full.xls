@@ -4,7 +4,19 @@
   </head>
   <body>
     <table>
-    <thead><tr><th>Fecha del Indicador</th><th>Banco</th><th>Compra</th><th>Venta</th></tr></thead>    <tbody> <tr class="odd"><td>25-06-2025</td><td>Banesco</td><td>107,2118</td><td>104,9243</td> </tr>
+    <thead><tr><th>Fecha del Indicador</th><th>Banco</th><th>Compra</th><th>Venta</th></tr></thead>    <tbody> <tr class="odd"><td>27-06-2025</td><td>Banesco</td><td>106,3437</td><td>108,3145</td> </tr>
+ <tr class="even"><td>27-06-2025</td><td>BBVA Provincial</td><td>107,2919</td><td>107,8781</td> </tr>
+ <tr class="odd"><td>27-06-2025</td><td>Banco Plaza</td><td>106,7388</td><td>106,9467</td> </tr>
+ <tr class="even"><td>27-06-2025</td><td>Banco Mercantil</td><td>106,8851</td><td>107,9000</td> </tr>
+ <tr class="odd"><td>27-06-2025</td><td>Banco Sofitasa</td><td>106,8136</td><td>107,1565</td> </tr>
+ <tr class="even"><td>27-06-2025</td><td>Otras Instituciones</td><td>107,1784</td><td>108,3368</td> </tr>
+ <tr class="odd"><td>26-06-2025</td><td>Banesco</td><td>105,6090</td><td>107,5066</td> </tr>
+ <tr class="even"><td>26-06-2025</td><td>BBVA Provincial</td><td>106,1994</td><td>107,1965</td> </tr>
+ <tr class="odd"><td>26-06-2025</td><td>Banco Mercantil</td><td>106,3877</td><td>107,4906</td> </tr>
+ <tr class="even"><td>26-06-2025</td><td>Banco Nacional de Crédito BNC</td><td>106,0278</td><td>107,4403</td> </tr>
+ <tr class="odd"><td>26-06-2025</td><td>Banco Exterior</td><td>106,1695</td><td>107,6524</td> </tr>
+ <tr class="even"><td>26-06-2025</td><td>Otras Instituciones</td><td>106,1334</td><td>107,5417</td> </tr>
+ <tr class="odd"><td>25-06-2025</td><td>Banesco</td><td>107,2118</td><td>104,9243</td> </tr>
  <tr class="even"><td>25-06-2025</td><td>BBVA Provincial</td><td>105,5027</td><td></td> </tr>
  <tr class="odd"><td>25-06-2025</td><td>100% Banco</td><td>106,3999</td><td>106,5500</td> </tr>
  <tr class="even"><td>25-06-2025</td><td>Banco Plaza</td><td>105,5924</td><td>105,4077</td> </tr>
