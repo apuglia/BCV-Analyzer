@@ -5,6 +5,9 @@ from datetime import date
 import subprocess
 import os
 
+# Get the directory where this script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
 # Layout: Title and Refresh Button
 col1, col2 = st.columns([4, 1])
 with col1:
@@ -12,13 +15,18 @@ with col1:
 with col2:
     if st.button("Actualizar datos"):
         with st.spinner("Actualizando datos..."):
-            subprocess.run(["python", "get_tasas.py"])
-            subprocess.run(["python", "clean_tasas.py"])
+            # Use correct paths for the scripts
+            get_tasas_script = os.path.join(script_dir, "get_tasas.py")
+            clean_tasas_script = os.path.join(script_dir, "clean_tasas.py")
+            subprocess.run(["python", get_tasas_script])
+            subprocess.run(["python", clean_tasas_script])
         st.success("Datos actualizados. Recargando...")
         st.rerun()  # Reload the app to show new data
 
 # Load your cleaned data (after possible update)
-csv_path = "../data/cleaned/tasas_sistema_bancario_full.csv"
+# Fix path to work both locally and when deployed
+csv_path = os.path.join(script_dir, "..", "data", "cleaned", "tasas_sistema_bancario_full.csv")
+
 if not os.path.exists(csv_path):
     st.error(f"File not found: {csv_path}. Please run the data preparation scripts first.")
     st.stop()
