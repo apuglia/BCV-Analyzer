@@ -5,6 +5,7 @@ from datetime import date
 import subprocess
 import os
 import json
+import datetime
 
 # Get the directory where this script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -111,18 +112,36 @@ if not filtered_df.empty:
 min_date = filtered_df['fecha'].min().date()
 max_date = filtered_df['fecha'].max().date()
 
-# Set default initial date to January 1, 2024 if in range
-initial_date = date(2024, 1, 1)
-if initial_date < min_date:
-    initial_date = min_date
-if initial_date > max_date:
-    initial_date = min_date  # fallback if all data is before 2024
+# Define quick ranges
+today = max_date
+quick_ranges = {
+    "Últimos 7 días": (today - datetime.timedelta(days=6), today),
+    "Últimos 15 días": (today - datetime.timedelta(days=14), today),
+    "Último mes": (today - datetime.timedelta(days=30), today),
+    "Últimos 6 meses": (today - datetime.timedelta(days=182), today),
+    "Último año": (today - datetime.timedelta(days=365), today),
+}
 
+# Default range: from start of 2024 to today
+slider_value = (date(2024, 1, 1), today)
+
+# Create a row of buttons
+col_buttons = st.columns(len(quick_ranges))
+button_pressed = None
+for i, (label, rng) in enumerate(quick_ranges.items()):
+    if col_buttons[i].button(label):
+        slider_value = (
+            max(rng[0], min_date),
+            min(rng[1], max_date)
+        )
+        button_pressed = label
+
+# The slider
 selected_range = st.slider(
     "Rango de Fecha",
     min_value=min_date,
     max_value=max_date,
-    value=(initial_date, max_date),
+    value=slider_value,
     format="MMM D, YYYY"
 )
 
