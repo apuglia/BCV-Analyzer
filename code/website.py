@@ -4,6 +4,7 @@ from io import BytesIO
 from datetime import date
 import subprocess
 import os
+import json
 
 # Get the directory where this script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -18,8 +19,11 @@ with col2:
             # Use correct paths for the scripts
             get_tasas_script = os.path.join(script_dir, "get_tasas.py")
             clean_tasas_script = os.path.join(script_dir, "clean_tasas.py")
+            get_bcv_script = os.path.join(script_dir, "get_bcv_official_rate.py")
+            
             subprocess.run(["python", get_tasas_script])
             subprocess.run(["python", clean_tasas_script])
+            subprocess.run(["python", get_bcv_script])
         st.success("Datos actualizados. Recargando...")
         st.rerun()  # Reload the app to show new data
 
@@ -42,28 +46,44 @@ if not df.empty and 'fecha' in df.columns:
 if not pd.api.types.is_datetime64_any_dtype(df['fecha']):
     df['fecha'] = pd.to_datetime(df['fecha'])
 
-# KPI: Show the average 'compra' value across all banks for the most recent date
-if not df.empty:
-    # Get the most recent date
-    most_recent_date = df['fecha'].max()
-    
-    # Filter data for the most recent date and calculate average compra
-    most_recent_data = df[df['fecha'] == most_recent_date]
-    avg_compra = most_recent_data['compra'].mean()
-    
-    # Count how many banks reported data for that date
-    num_banks = len(most_recent_data)
-    
+
+# Path to the rates file
+bcv_rates_path = os.path.join(script_dir, "..", "data", "cleaned", "bcv_official_rates.json")
+
+if os.path.exists(bcv_rates_path):
+    with open(bcv_rates_path, "r", encoding="utf-8") as f:
+        bcv_rates_data = json.load(f)
+    value_date = bcv_rates_data.get("fecha_valor", "")
+    rates = bcv_rates_data.get("rates", [])
+
     st.markdown(
-        f"""
-        <div style='background-color: #e3f0ff; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>
-            <h3 style='color: #1a4a7a; margin: 0;'>Promedio de compra más reciente</h3>
-            <p style='font-size: 2em; color: #1a4a7a; margin: 0;'><b>{avg_compra:.4f}</b></p>
-            <p style='color: #1a4a7a; margin: 5px 0 0 0; font-size: 0.9em;'>Basado en {num_banks} bancos ({most_recent_date.strftime('%Y-%m-%d')})</p>
-        </div>
-        """,
+        "<h3 style='color:#1a4a7a;'>Tasas Oficiales BCV</h3>",
         unsafe_allow_html=True
     )
+    # Display as columns, USD first, with blueish background
+    rates_sorted = sorted(rates, key=lambda r: 0 if r['code'] == 'USD' else 1)
+    cols = st.columns(len(rates_sorted))
+    for i, rate in enumerate(rates_sorted):
+        value = rate['value'] / 100000000
+        with cols[i]:
+            st.markdown(
+                f"""
+                <div style='background-color: #e3f0ff; border-radius: 12px; padding: 12px 0 8px 0; text-align: center; margin-bottom: 8px;'>
+                    <span style='font-size:1.1em; color:#1a4a7a; font-weight:600;'>{rate['symbol']} {rate['code']}</span><br>
+                    <span style='font-size:1.0em; color:#222; font-weight:400;'>{value:,.2f}</span>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+else:
+    st.info("No se encontraron tasas oficiales BCV.")
+
+st.markdown("<hr style='margin: 2em 0;'>", unsafe_allow_html=True)
+st.markdown(
+    "<h3 style='color:#1a4a7a;'>Tasas USD en Bancos Venezolanos</h3>",
+    unsafe_allow_html=True
+)
+
 
 # Add filter: type bank name
 bank_query = st.text_input("Nombre del banco (puedes escribir parte del nombre):", "Banesco")
@@ -158,3 +178,9 @@ st.download_button(
     file_name="tasas_filtradas.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
+st.markdown(
+    "<style>.element-container .stMetric { min-width: 120px; }</style>",
+    unsafe_allow_html=True
+)
+

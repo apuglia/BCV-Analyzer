@@ -1,0 +1,40 @@
+{
+  "fecha_valor": "Fecha Valor:",
+  "rates": [
+    {
+      "id": "euro",
+      "code": "EUR",
+      "symbol": "€",
+      "value": 12619295498.0,
+      "raw": "126,19295498"
+    },
+    {
+      "id": "yuan",
+      "code": "CNY",
+      "symbol": "¥",
+      "value": 1500997182.0,
+      "raw": "15,00997182"
+    },
+    {
+      "id": "lira",
+      "code": "TRY",
+      "symbol": "₺",
+      "value": 269880810.0,
+      "raw": "2,69880810"
+    },
+    {
+      "id": "rublo",
+      "code": "RUB",
+      "symbol": "₽",
+      "value": 137108784.0,
+      "raw": "1,37108784"
+    },
+    {
+      "id": "dolar",
+      "code": "USD",
+      "symbol": "$",
+      "value": 10762450000.0,
+      "raw": "107,62450000"
+    }
+  ]
+}
