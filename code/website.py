@@ -123,7 +123,7 @@ selected_range = st.slider(
     min_value=min_date,
     max_value=max_date,
     value=(initial_date, max_date),
-    format="YYYY-MM-DD"
+    format="MMM D, YYYY"
 )
 
 filtered_df = filtered_df[
