@@ -42,14 +42,24 @@ if not df.empty and 'fecha' in df.columns:
 if not pd.api.types.is_datetime64_any_dtype(df['fecha']):
     df['fecha'] = pd.to_datetime(df['fecha'])
 
-# KPI: Show the most recent 'compra' value in a blueish box
+# KPI: Show the average 'compra' value across all banks for the most recent date
 if not df.empty:
-    most_recent_row = df.sort_values('fecha').iloc[-1]
+    # Get the most recent date
+    most_recent_date = df['fecha'].max()
+    
+    # Filter data for the most recent date and calculate average compra
+    most_recent_data = df[df['fecha'] == most_recent_date]
+    avg_compra = most_recent_data['compra'].mean()
+    
+    # Count how many banks reported data for that date
+    num_banks = len(most_recent_data)
+    
     st.markdown(
         f"""
         <div style='background-color: #e3f0ff; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>
-            <h3 style='color: #1a4a7a; margin: 0;'>Compra más reciente</h3>
-            <p style='font-size: 2em; color: #1a4a7a; margin: 0;'><b>{most_recent_row['compra']:.4f}</b></p>
+            <h3 style='color: #1a4a7a; margin: 0;'>Promedio de compra más reciente</h3>
+            <p style='font-size: 2em; color: #1a4a7a; margin: 0;'><b>{avg_compra:.4f}</b></p>
+            <p style='color: #1a4a7a; margin: 5px 0 0 0; font-size: 0.9em;'>Basado en {num_banks} bancos ({most_recent_date.strftime('%Y-%m-%d')})</p>
         </div>
         """,
         unsafe_allow_html=True
